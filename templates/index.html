@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Book App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: lightblue;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        h1 {
+            color: #333;
+            text-align: left;
+        }
+        
+        p {
+            color: #666;
+            font-size: 24px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 32px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to My Book App!</h1>
+    <p>I'm learning how HTML and CSS work together!</p>
+    <button onclick="sayHello()">Search Books</button>
+    <p id="message"></p>
+
+    <script>
+        let clickCount = 0;
+        function sayHello() {
+            clickCount += 1;
+            const messageElement = document.getElementById("message");
+    
+
+            if (messageElement) {
+                messageElement.innerHTML = `Button clicked ${clickCount} times`;
+            }
+        }
+
+    </script>
+</body>
+</html>
