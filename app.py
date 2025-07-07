@@ -15,6 +15,7 @@ def home():
     """Home page - shows search and recent ratings"""
     return render_template('index.html')
 
+# Handles API calls to the Book API
 @app.route('/api/search')
 def api_search():
     # ex: https://openlibrary.org/search.json?q=harry+potter where q is "harry potter"
