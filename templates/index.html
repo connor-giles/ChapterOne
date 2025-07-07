@@ -5,18 +5,18 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: lightblue;
+            background-color: rgb(95, 118, 78);
             margin: 0;
             padding: 20px;
         }
         
         h1 {
-            color: #333;
+            color: #c6cfc6;
             text-align: left;
         }
         
         p {
-            color: #666;
+            color: #cfcfcf;
             font-size: 24px;
         }
 
@@ -36,21 +36,54 @@
     </style>
 </head>
 <body>
-    <h1>Welcome to My Book App!</h1>
-    <p>I'm learning how HTML and CSS work together!</p>
-    <button onclick="sayHello()">Search Books</button>
-    <p id="message"></p>
+    <h1>Search</h1>>
+
+    <input
+      type="text"
+      id="bookSearch"
+      placeholder="Search for books..."
+      style="width: 300px; padding: 10px; font-size: 16px;"
+    />
+
+    <button onclick="searchBooks()" style="padding: 10px 20px; font-size: 16px; margin-left: 10px;">
+        Search
+    </button>
+
+    <div id="Results"></div>
+
 
     <script>
-        let clickCount = 0;
-        function sayHello() {
-            clickCount += 1;
-            const messageElement = document.getElementById("message");
-    
+        async function searchBooks() {
+            // Trims any extra information off the input
+            const query = document.getElementById('bookSearch').value.trim(); 
+            // This div displays the search results
+            resultsDiv = document.getElementById('Results');
 
-            if (messageElement) {
-                messageElement.innerHTML = `Button clicked ${clickCount} times`;
+            if (query.length === 0) { 
+                resultsDiv.innerHTML = '<p>Please enter a search term</p>';
+                return;
             }
+            
+            const encodedSearch = encodeURIComponent(query);
+            console.log(encodedSearch)
+            const response = await fetch(`/api/search?q=${encodedSearch}`);
+
+            // Handles bad responses from the API call
+            if (!response.ok) {
+                resultsDiv.innerHTML = '<p>Error fetching results</p>';
+                return;
+            }
+
+            const books = await response.json();
+            console.log(books);
+            // If no books are returned from the API search
+            if (books.length === 0) {
+                resultsDiv.innerHTML = '<p>No books found.</p>';
+                return;
+            }
+
+
+
         }
 
     </script>

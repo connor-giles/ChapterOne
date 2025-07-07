@@ -1,8 +1,10 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 import sqlite3
 import requests
+import urllib.parse
 from datetime import datetime
 import os
+import json
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -12,6 +14,40 @@ app.secret_key = 'your-secret-key-change-this'  # Change this to a random string
 def home():
     """Home page - shows search and recent ratings"""
     return render_template('index.html')
+
+@app.route('/api/search')
+def api_search():
+    # ex: https://openlibrary.org/search.json?q=harry+potter where q is "harry potter"
+    query = request.args.get('q', '')
+    
+    # Check for bad user input
+    if not query:
+        return jsonify({'Error': 'No query provided'}), 400
+    
+    # Encode the query for the API url
+    encoded_query = urllib.parse.quote(query)
+
+    # Build the API call
+    rest_url = f'https://openlibrary.org/search.json?q={encoded_query}'
+    
+    # Make the call to the API
+    response = requests.get(rest_url)
+
+    if response.status_code != 200:
+        return jsonify({'error': 'Failed to fetch from book API'}), 500
+
+    data = response.json()
+    
+    book_results = []
+    for book in data["docs"][:10]:
+        book_to_add = {
+            'title': book["title"],
+            'author': book["author_name"][0]
+        }
+        book_results.append(book_to_add)
+
+    print(json.dumps(book_results, indent=2))
+    return jsonify(book_results)
 
 if __name__ == '__main__':
     # Run the app in debug mode (shows errors and auto-reloads)
