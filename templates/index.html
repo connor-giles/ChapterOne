@@ -74,14 +74,25 @@
                 return;
             }
 
+            // Books now holds our json response
             const books = await response.json();
-            console.log(books);
+
             // If no books are returned from the API search
             if (books.length === 0) {
                 resultsDiv.innerHTML = '<p>No books found.</p>';
                 return;
             }
 
+            // Display the book results as text
+            let result_html = '<ul>';
+
+            // Add each book returned as part of the unordered list (ul)
+            books.forEach(book => {
+                result_html += `<li>${book.title} by ${book.author}</li>`;
+            });
+            result_html += '</ul>';
+
+            resultsDiv.innerHTML = result_html;
 
 
         }
