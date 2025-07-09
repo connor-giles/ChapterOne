@@ -68,7 +68,7 @@
             console.log(encodedSearch)
             const response = await fetch(`/api/search?q=${encodedSearch}`);
 
-            // Handles bad responses from the API call
+            // Handles bad responses from the API call, repsonse.ok returns ranges (200-299)
             if (!response.ok) {
                 resultsDiv.innerHTML = '<p>Error fetching results</p>';
                 return;
