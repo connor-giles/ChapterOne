@@ -8,6 +8,13 @@
     background: #f6f6f6;
     width: 400px;
     transition: box-shadow 0.25s;
+    align-content: center;
+}
+
+.search-bar-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 100px;        
 }
 
 .search:focus-within {
