@@ -31,6 +31,7 @@ def api_search():
     # Build the API call
     rest_url = f'https://openlibrary.org/search.json?q={encoded_query}'
     
+    
     # Make the call to the API
     response = requests.get(rest_url)
 
@@ -46,18 +47,21 @@ def api_search():
         # Get the information we want from the data
         title = book.get("title")
         author_name = book.get("author_name")
+        olid = book.get("cover_edition_key") # Book cover image info
+        if olid:
+            bookcover_url = f'https://covers.openlibrary.org/b/olid/{olid}-L.jpg'
 
         # If the data we want exists, add it to the list to return to the frontend
-        if title and author_name:
+        if title and author_name and olid:
             book_to_add = {
                 'title': title,
-                'author': author_name[0]
+                'author': author_name[0],
+                'bookcover_url': bookcover_url
             }
             book_results.append(book_to_add)
         else:
             continue
 
-    print(json.dumps(book_results, indent=2))
     return jsonify(book_results)
 
 if __name__ == '__main__':

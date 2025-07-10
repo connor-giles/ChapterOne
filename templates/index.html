@@ -1,61 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Book App</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: rgb(95, 118, 78);
-            margin: 0;
-            padding: 20px;
-        }
-        
-        h1 {
-            color: #c6cfc6;
-            text-align: left;
-        }
-        
-        p {
-            color: #cfcfcf;
-            font-size: 24px;
-        }
-
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px 32px;
-            font-size: 16px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: red;
-        }
-    </style>
+    <link rel="stylesheet" href="static/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=search" />
 </head>
 <body>
-    <h1>Search</h1>>
-
-    <input
-      type="text"
-      id="bookSearch"
-      placeholder="Search for books..."
-      style="width: 300px; padding: 10px; font-size: 16px;"
-    />
-
-    <button onclick="searchBooks()" style="padding: 10px 20px; font-size: 16px; margin-left: 10px;">
-        Search
-    </button>
+    <form onsubmit="searchBooks(event)">
+        <div class="search">
+            <span class="search-icon material-symbols-outlined">search</span>
+            <input class="search-input" type="search" id="bookSearch" placeholder="Search for books...">
+        </div>
+    </form>
 
     <div id="Results"></div>
 
 
     <script>
-        async function searchBooks() {
+        async function searchBooks(event) {
+            event.preventDefault();
             // Trims any extra information off the input
             const query = document.getElementById('bookSearch').value.trim(); 
+            console.log(query)
             // This div displays the search results
             resultsDiv = document.getElementById('Results');
 
@@ -84,17 +52,20 @@
             }
 
             // Display the book results as text
-            let result_html = '<ul>';
+            let result_html = '<ul style="list-style-type: none; padding-left: 0;">';
 
             // Add each book returned as part of the unordered list (ul)
             books.forEach(book => {
-                result_html += `<li>${book.title} by ${book.author}</li>`;
+                result_html += `
+                <li>
+                    ${book.title} by ${book.author}<br>
+                    <img src="${book.bookcover_url}" alt="Cover of ${book.title}" style="display: block; width:1 00px; height: auto; margin: 10px auto;">
+                </li>
+                `;
             });
             result_html += '</ul>';
 
             resultsDiv.innerHTML = result_html;
-
-
         }
 
     </script>
