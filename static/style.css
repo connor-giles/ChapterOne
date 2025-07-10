@@ -11,6 +11,20 @@
     align-content: center;
 }
 
+.results-text-success {
+   font-size: 16px;
+   font-family: 'Lexend', sans-serif; 
+   align-items: center;
+}
+
+.results-text-fail {
+   font-size: 30px;
+   font-family: 'Lexend-Bold', sans-serif; 
+   align-items: center;
+   text-align: center;
+   padding-top: 20px;
+}
+
 .search-bar-container {
     display: flex;
     justify-content: center;
@@ -37,3 +51,22 @@
     color: rgba(0, 0, 0, 0.5);
 }
 
+.book-entry{
+    text-align: center;
+    list-style-type: none;
+}
+
+.no-books-found{
+    text-align: center;
+    font-size: 24px;
+}
+
+.number-results{
+    text-align: center;
+    font-size: 12px;
+    font-style: italic;
+    font-family: 'Lexend', sans-serif;
+    color: rgba(0, 0, 0, 0.5);
+    padding-top: 10px;
+    padding-bottom: 40px;
+}
