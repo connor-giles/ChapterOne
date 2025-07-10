@@ -8,7 +8,7 @@ import json
 
 # Initialize Flask app
 app = Flask(__name__)
-app.secret_key = 'your-secret-key-change-this'  # Change this to a random string
+books_apikey = os.getenv('GOOGLE_BOOKS_API_KEY')
 
 @app.route('/')
 def home():
@@ -29,7 +29,8 @@ def api_search():
     encoded_query = urllib.parse.quote(query)
 
     # Build the API call
-    rest_url = f'https://openlibrary.org/search.json?q={encoded_query}'
+    # rest_url = f'https://openlibrary.org/search.json?q={encoded_query}'
+    rest_url = f'https://www.googleapis.com/books/v1/volumes?q={encoded_query}&key={books_apikey}'
     
     
     # Make the call to the API
@@ -43,20 +44,24 @@ def api_search():
     book_results = []
 
     # Loop throught the first 10 results of the API call
-    for book in data["docs"][:10]:
+    for book in data["items"]:
         # Get the information we want from the data
-        title = book.get("title")
-        author_name = book.get("author_name")
-        olid = book.get("cover_edition_key") # Book cover image info
-        if olid:
-            bookcover_url = f'https://covers.openlibrary.org/b/olid/{olid}-L.jpg'
+        title = book.get("volumeInfo", {}).get("title", "Title not found")
+
+        # Handle valid author returns
+        author_list = book.get("volumeInfo", {}).get("authors", [])
+        if not author_list:
+            continue
+        author_name = author_list[0]
+            
+        cover_url = book.get("volumeInfo", {}).get("imageLinks", {}).get("thumbnail", "No image available")
 
         # If the data we want exists, add it to the list to return to the frontend
-        if title and author_name and olid:
+        if title and author_name:
             book_to_add = {
                 'title': title,
-                'author': author_name[0],
-                'bookcover_url': bookcover_url
+                'author': author_name,
+                'cover_url': cover_url
             }
             book_results.append(book_to_add)
         else:

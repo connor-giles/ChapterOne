@@ -17,7 +17,9 @@
         </form>
     </div>
 
-    <div id="Results"></div>
+    <div class="number-results" id="number-results"></div>
+    <div class="results-text-success" id="results-text-success"></div>
+    <div class="results-text-fail" id="results-text-fail"></div>
 
 
     <script>
@@ -27,10 +29,12 @@
             const query = document.getElementById('bookSearch').value.trim(); 
             console.log(query)
             // This div displays the search results
-            resultsDiv = document.getElementById('Results');
+            resultsDivSuccess = document.getElementById('results-text-success');
+            resultsDivFail = document.getElementById('results-text-fail');
+            numResults = document.getElementById('number-results');
 
             if (query.length === 0) { 
-                resultsDiv.innerHTML = '<p>Please enter a search term</p>';
+                resultsDivFail.innerHTML = '<p>Please enter a search term</p>';
                 return;
             }
             
@@ -40,7 +44,7 @@
 
             // Handles bad responses from the API call, repsonse.ok returns ranges (200-299)
             if (!response.ok) {
-                resultsDiv.innerHTML = '<p>Error fetching results</p>';
+                resultsDivFail.innerHTML = '<p>Error fetching results</p>';
                 return;
             }
 
@@ -49,25 +53,28 @@
 
             // If no books are returned from the API search
             if (books.length === 0) {
-                resultsDiv.innerHTML = '<p>No books found.</p>';
+                resultsDivFail.innerHTML = `<p>No books found for <i><strong>${query}</strong></i></p>`;
                 return;
             }
 
+            numResults.innerHTML = `Showing ${books.length} results...`
+
             // Display the book results as text
-            let result_html = '<ul style="list-style-type: none; padding-left: 0;">';
+            let result_html = '<ul>';
 
             // Add each book returned as part of the unordered list (ul)
             books.forEach(book => {
                 result_html += `
-                <li>
+                <li class="book-entry">
                     ${book.title} by ${book.author}<br>
-                    <img src="${book.bookcover_url}" alt="Cover of ${book.title}" style="display: block; width:1 00px; height: auto; margin: 10px auto;">
+                    <img src="${book.cover_url}" alt="Cover of ${book.title}" style="display: block; width:1 00px; height: auto; margin: 10px auto;">
+                <br><br><br><br>
                 </li>
                 `;
             });
             result_html += '</ul>';
 
-            resultsDiv.innerHTML = result_html;
+            resultsDivSuccess.innerHTML = result_html;
         }
 
     </script>
