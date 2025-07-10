@@ -15,6 +15,7 @@ def home():
     """Home page - shows search and recent ratings"""
     return render_template('index.html')
 
+# Handles API calls to the Book API
 @app.route('/api/search')
 def api_search():
     # ex: https://openlibrary.org/search.json?q=harry+potter where q is "harry potter"
@@ -39,12 +40,22 @@ def api_search():
     data = response.json()
     
     book_results = []
+
+    # Loop throught the first 10 results of the API call
     for book in data["docs"][:10]:
-        book_to_add = {
-            'title': book["title"],
-            'author': book["author_name"][0]
-        }
-        book_results.append(book_to_add)
+        # Get the information we want from the data
+        title = book.get("title")
+        author_name = book.get("author_name")
+
+        # If the data we want exists, add it to the list to return to the frontend
+        if title and author_name:
+            book_to_add = {
+                'title': title,
+                'author': author_name[0]
+            }
+            book_results.append(book_to_add)
+        else:
+            continue
 
     print(json.dumps(book_results, indent=2))
     return jsonify(book_results)
