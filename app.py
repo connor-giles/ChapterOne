@@ -10,6 +10,7 @@ import json
 app = Flask(__name__)
 books_apikey = os.getenv('GOOGLE_BOOKS_API_KEY')
 
+# The home page
 @app.route('/')
 def home():
     """Home page - shows search and recent ratings"""
